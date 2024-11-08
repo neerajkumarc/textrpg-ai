@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 
 const initialStory =
   "You awaken in a dark forest. A path leads north and a stream flows south. What do you do?";
+const initialImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
+  initialStory
+)}?width=1280&height=720&nologo=true`;
 const MAX_RESPONSES = 5; // Maximum number of AI responses before ending the story
 
 export default function Component() {
@@ -14,6 +15,7 @@ export default function Component() {
   const [userInput, setUserInput] = useState("");
   const [responseCount, setResponseCount] = useState(0);
   const [isEnded, setIsEnded] = useState(false);
+  const [imageUrl, setImageUrl] = useState(initialImageUrl);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
@@ -27,6 +29,8 @@ export default function Component() {
 
   const continueStory = async (input: string) => {
     const newStoryPart = await fetchText(input);
+    const imageUrl = await fetchImage(newStoryPart);
+    setImageUrl(imageUrl);
     setStoryParts((prev) => [...prev, `> ${input}`, newStoryPart]);
     setUserInput("");
     setResponseCount((prev) => prev + 1);
@@ -42,6 +46,23 @@ export default function Component() {
     setStoryParts([initialStory]);
     setResponseCount(0);
     setIsEnded(false);
+  };
+  const fetchImage = async (imageDescription: string): Promise<string> => {
+    try {
+      const response = await fetch(
+        `https://image.pollinations.ai/prompt/${encodeURIComponent(
+          imageDescription
+        )}?width=1280&height=720&nologo=true`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = response.url;
+      return data;
+    } catch (error) {
+      console.error("Error fetching text:", error);
+      return "An error occurred while generating image. Please try again.";
+    }
   };
 
   const fetchText = async (userInput: string): Promise<string> => {
@@ -78,22 +99,14 @@ export default function Component() {
 
   return (
     <div className="min-h-screen max-w-3xl mx-auto p-4 md:p-8 flex flex-col">
-      <ScrollArea className="flex-grow mb-4 border rounded-lg p-4 bg-gray-100 dark:bg-gray-800">
-        <div className="space-y-4">
-          {storyParts.map((part, index) => (
-            <p
-              key={index}
-              className={`text-sm md:text-lg font-medium font-mono ${
-                part.startsWith(">") ? "text-blue-600 dark:text-blue-400" : ""
-              }`}
-            >
-              {part}
-            </p>
-          ))}
-        </div>
-      </ScrollArea>
-      <Card className="border-2 border-primary bg-background">
-        <CardContent className="p-2">
+      <div>
+        <img src={imageUrl} alt="Image" className="w-full" />
+      </div>
+      <p className="space-y-4 py-4">
+        {storyParts.findLast((part) => ({ part }))}
+      </p>
+      <div className="border-2 border-primary bg-background">
+        <div className="p-2">
           <input
             type="text"
             value={userInput}
@@ -104,8 +117,8 @@ export default function Component() {
             placeholder={isEnded ? "Story has ended" : "Enter your action..."}
             disabled={isEnded}
           />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       {isEnded && (
         <Button onClick={restartStory} className="mt-4">
           Restart Story
