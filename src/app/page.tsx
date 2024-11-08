@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 const initialStory =
@@ -16,16 +16,26 @@ export default function Component() {
   const [responseCount, setResponseCount] = useState(0);
   const [isEnded, setIsEnded] = useState(false);
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
+  const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
   };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setLoading(true);
     if (e.key === "Enter" && userInput.trim() && !isEnded) {
       await continueStory(userInput);
     }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [storyParts]);
 
   const continueStory = async (input: string) => {
     const newStoryPart = await fetchText(input);
@@ -100,7 +110,11 @@ export default function Component() {
   return (
     <div className="min-h-screen max-w-3xl mx-auto p-4 md:p-8 flex flex-col">
       <div>
-        <img src={imageUrl} alt="Image" className="w-full" />
+        <img
+          src={imageUrl}
+          alt="Image"
+          className={`w-full  ${loading ? "animate-pulse" : ""}`}
+        />
       </div>
       <p className="space-y-4 py-4">
         {storyParts.findLast((part) => ({ part }))}
@@ -110,12 +124,13 @@ export default function Component() {
           <input
             type="text"
             value={userInput}
+            ref={inputRef}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             className="w-full bg-transparent font-mono focus:outline-none text-foreground"
             autoFocus
             placeholder={isEnded ? "Story has ended" : "Enter your action..."}
-            disabled={isEnded}
+            disabled={isEnded || loading}
           />
         </div>
       </div>
