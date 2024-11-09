@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const initialStory =
   "You awaken in a dark forest. A path leads north and a stream flows south. What do you do?";
 const initialImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
-  initialStory
+  initialStory + " retro game art"
 )}?width=1280&height=720&nologo=true`;
 const MAX_RESPONSES = 5; // Maximum number of AI responses before ending the story
 
@@ -61,9 +61,10 @@ export default function Component() {
     try {
       const response = await fetch(
         `https://image.pollinations.ai/prompt/${encodeURIComponent(
-          imageDescription
+          `${imageDescription} retro game art`
         )}?width=1280&height=720&nologo=true`
       );
+      console.log(response.url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -137,7 +138,7 @@ export default function Component() {
         </div>
       </div>
       {isEnded && (
-        <Button onClick={restartStory} className="mt-4">
+        <Button onClick={restartStory} className="mt-4 text-2xl p-6">
           Restart Story
         </Button>
       )}
