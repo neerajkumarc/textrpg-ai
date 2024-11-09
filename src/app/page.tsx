@@ -108,15 +108,17 @@ export default function Component() {
   };
 
   return (
-    <div className="min-h-screen max-w-3xl mx-auto p-4 md:p-8 flex flex-col">
+    <div className="min-h-screen max-w-5xl mx-auto p-4 md:p-8 flex flex-col">
       <div>
         <img
           src={imageUrl}
           alt="Image"
-          className={`w-full  ${loading ? "animate-pulse" : ""}`}
+          className={`w-full h-56 md:h-96 object-cover  ${
+            loading ? "animate-pulse" : ""
+          }`}
         />
       </div>
-      <p className="space-y-4 py-4">
+      <p className="space-y-4 py-4 text-2xl">
         {storyParts.findLast((part) => ({ part }))}
       </p>
       <div className="border-2 border-primary bg-background">
@@ -127,7 +129,7 @@ export default function Component() {
             ref={inputRef}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent font-mono focus:outline-none text-foreground"
+            className="w-full bg-transparent  focus:outline-none text-foreground text-2xl"
             autoFocus
             placeholder={isEnded ? "Story has ended" : "Enter your action..."}
             disabled={isEnded || loading}
