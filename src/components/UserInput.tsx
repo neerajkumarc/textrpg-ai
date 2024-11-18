@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetchText, fetchImage, setStoryState } from "../actions/StoryServer";
+import { fetchText, setStoryState } from "../actions/StoryServer";
 import { BackHomeBtn } from "./BackHomeBtn";
 import { LoaderCircle } from "lucide-react";
+import { fetchImage } from "@/lib/utils";
 
 export const UserInput = ({
   storyParts,

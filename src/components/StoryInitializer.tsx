@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   generateStartingSentence,
-  fetchImage,
   setStoryState,
 } from "../actions/StoryServer";
 import { LoaderCircle } from "lucide-react";
+import { fetchImage } from "@/lib/utils";
 
 export const StoryInitializer = () => {
   const [initialStory, setInitialStory] = useState("");
