@@ -21,8 +21,8 @@ export default async function InteractiveStory() {
                 AI.
               </p>
               <p className="text-2xl my-8">
-                Start your story by entering a sentence. The AI will generate a
-                story based on your input.
+                Start your story by entering a sentence or click on the
+                suggestion. The AI will generate a story based on your input.
               </p>
             </div>
             <StoryInitializer />
