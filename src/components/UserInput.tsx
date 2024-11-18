@@ -59,6 +59,7 @@ export const UserInput = ({
           }`}
           placeholder={isEnded ? "Story has ended" : "Enter your action..."}
           disabled={isEnded || loading}
+          autoFocus={true}
         />
         {loading && (
           <div className="absolute right-2 top-1/2 -translate-y-1/2 text-white">

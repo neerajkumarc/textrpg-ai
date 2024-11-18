@@ -18,10 +18,10 @@ export const StoryInitializer = () => {
   const handleInitialize = async () => {
     setLoading(true);
     if (initialStory.trim()) {
-      const imageUrl = await fetchImage(initialStory);
       const sentence = await generateStartingSentence({
         sentence: initialStory,
       });
+      const imageUrl = await fetchImage(sentence);
       await setStoryState([sentence], imageUrl, false);
       router.refresh();
     }
@@ -42,7 +42,7 @@ export const StoryInitializer = () => {
         onClick={handleInitialize}
         className="w-full text-2xl p-6 flex items-center gap-2"
         disabled={loading}
-        type="submit"
+        type="button"
       >
         {loading ? (
           <>
