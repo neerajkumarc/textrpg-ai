@@ -28,10 +28,8 @@ export const StoryInitializer = () => {
     setLoading(false);
   };
 
-  const handleSuggestionClick = () => {
-    setInitialStory(
-      "You wake up in a forest, with no memory of how you got there and a mysterious map in your hand."
-    );
+  const handleSuggestionClick = (sentence: string) => {
+    setInitialStory(sentence);
   };
 
   return (
@@ -39,14 +37,22 @@ export const StoryInitializer = () => {
       <div className="grid grid-cols-2 gap-4 my-4">
         <p
           className="p-4 border rounded-md cursor-pointer hover:scale-105 transition-all"
-          onClick={handleSuggestionClick}
+          onClick={() =>
+            handleSuggestionClick(
+              " You wake up in a forest, with no memory of how you got there and a mysterious map in your hand."
+            )
+          }
         >
           You wake up in a forest, with no memory of how you got there and a
           mysterious map in your hand.
         </p>
         <p
           className="p-4 border rounded-md cursor-pointer hover:scale-105 transition-all"
-          onClick={handleSuggestionClick}
+          onClick={() =>
+            handleSuggestionClick(
+              " The donut shop owner hands you a pastry and whispers, 'This holds the key to everything."
+            )
+          }
         >
           The donut shop owner hands you a pastry and whispers, 'This holds the
           key to everything.
